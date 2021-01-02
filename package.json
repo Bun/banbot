@@ -1,0 +1,7 @@
+{
+	"name": "banbot",
+	"main": "banbot.js",
+	"dependencies": {
+		"dank-twitch-irc": "^4.1.0"
+	}
+}
