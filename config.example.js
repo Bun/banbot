@@ -3,7 +3,7 @@ exports.userConfig = {
     username: "myuser",
     // The OAuth token (with "oauth:" prefix) of this account; the token from
     // Chatterino will work
-    token: "oauth:abc12345",
+    password: "oauth:abc12345",
     // A list of channels to monitor
     channels: [
         "foo", "bar"
