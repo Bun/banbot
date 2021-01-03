@@ -111,6 +111,7 @@ const sender = new ChatClient({
 
 sender.on('JOIN', msg => console.log(`[sender] Joined ${msg.channelName}`));
 sender.on('PART', msg => console.log(`[sender] Left ${msg.channelName}`));
+sender.on('error', error => console.log(`[sender] Error: ${error}`));
 sender.on('ready', async () => {
     console.log('[sender] Connected');
     // Optional; be aware that joining from multiple connections may result in
@@ -136,7 +137,7 @@ const cmp = function(a, b) {
         return 0;
     }
     return (a > b) ? 1 : -1;
-}
+};
 
 const flushBuffers = function() {
     if (msgBuffer.msgs.length == 0) {
@@ -227,6 +228,8 @@ monitor.on('CLEARCHAT', msg => {
 
 monitor.on('JOIN', msg => console.log(`[monitor] Joined ${msg.channelName}`));
 monitor.on('PART', msg => console.log(`[monitor] Left ${msg.channelName}`));
+monitor.on('error', error => console.log(`[monitor] Error: ${error}`));
+
 monitor.on('ready', async () => {
     console.log(`[monitor] Connected`);
     await monitor.joinAll(channels);
