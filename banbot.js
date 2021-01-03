@@ -28,8 +28,14 @@ const config = {
     // Message formatting:
     channelSuffix: ': ',
     multiJoin: ' - ',
-    prefixBanned: 'DOCING',
-    prefixTimeout: 'MODS',
+
+    // messagePrefix returns the prefix that will be used for the message. You
+    // can include things like /me here, or vary the message by channel.
+    messagePrefix: function(channel, ban) {
+        if (ban)
+            return 'DOCING';
+        return 'MODS';
+    },
 
     // formatLong is used to format messages when there are only a small number
     // of events.
@@ -179,16 +185,18 @@ const flushBuffers = function() {
         username = msg.targetUsername;
         parts.push(formatter(msg));
     }
-    let formatted = (ban ? config.prefixBanned : config.prefixTimeout) + ' ' +
-        parts.join('');
-    if (formatted.length > 490) {
-        formatted = formatted.substr(0, 490) + '…';
+    const events = parts.join('');
+    if (isAnonymous) {
+        console.log(events);
+    } else {
+        config.announceTo.forEach(function(c) {
+            let formatted = config.messagePrefix(c, ban) + ' ' + events;
+            if (formatted.length > 490) {
+                formatted = formatted.substr(0, 490) + '…';
+            }
+            sender.privmsg(c, formatted);
+        });
     }
-
-    if (isAnonymous)
-        console.log(formatted);
-    else
-        config.announceTo.forEach(c => sender.privmsg(c, formatted));
     msgBuffer.timer = setTimeout(flushBuffers, config.followupResponseTime);
 };
 
