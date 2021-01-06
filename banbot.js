@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { ChatClient } = require('dank-twitch-irc');
 const { userConfig } = require('./config.js');
+const utils = require('./utils.js');
 
 // Default config values
 const config = {
@@ -43,7 +44,7 @@ const config = {
         if (msg.banDuration == null) {
             return `${msg.targetUsername} was banned`;
         }
-        return `${msg.targetUsername} was timed out for ${formatSeconds(msg.banDuration)}`;
+        return `${msg.targetUsername} was timed out for ${utils.formatSeconds(msg.banDuration)}`;
     },
 
     // formatShort is used to format messages when there are a lot of events.
@@ -51,7 +52,7 @@ const config = {
         if (msg.banDuration == null) {
             return `${msg.targetUsername} banned`;
         }
-        return `${msg.targetUsername} ${formatSeconds(msg.banDuration)}`;
+        return `${msg.targetUsername} ${utils.formatSeconds(msg.banDuration)}`;
     }
 };
 
@@ -72,25 +73,6 @@ if (!channels.length) {
     return;
 }
 
-const formatSeconds = function(secs) {
-    let s = '';
-    if (secs >= 86400) {
-        s += `${(secs / 86400) | 0}d`;
-        secs %= 86400;
-    }
-    if (secs >= 3600) {
-        s += `${(secs / 3600) | 0}h`;
-        secs %= 3600;
-    }
-    if (secs >= 60) {
-        s += `${(secs / 60) | 0}m`;
-        secs %= 60;
-    }
-    if (s === '' || secs > 0) {
-        s += `${secs}s`;
-    }
-    return s;
-};
 
 
 //
